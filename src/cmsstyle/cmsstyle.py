@@ -775,7 +775,7 @@ def getCMSStyle():
 #  ######  ##     ##  ######       ########  #######  ##     ## ####
 
 
-def CMS_lumi(pad, iPosX=11, scaleLumi=1):
+def CMS_lumi(pad, iPosX=11, scaleLumi=1, scaleExtraText=1):
     """
     Draw the CMS text and luminosity information on the specified pad.
 
@@ -784,6 +784,8 @@ def CMS_lumi(pad, iPosX=11, scaleLumi=1):
         iPosX (int, optional): The position of the CMS logo. Defaults to 11 (top-left, left-aligned).
                                Set it to 0 to put it outside the box (top left)
         scaleLumi (float, optional): Scale factor for the luminosity text size (default is 1, no scaling).
+        scaleExtraText (float, optional): Factor for the x-offset from the extra text when
+                                          putting the logo and the rest outside the frame.
     """
     relPosX = 0.035
     relPosY = 0.035
@@ -838,9 +840,10 @@ def CMS_lumi(pad, iPosX=11, scaleLumi=1):
             drawText(cmsText, L, outOfFrame_posY, cmsTextFont, 11, cmsTextSize * t)
 
             # Checking position of the extraText after the CMS logo text.
-            scale = 1
+            scale = scaleExtraText
             if W > H:
-                scale = H / float(W)  # For a rectangle
+                scale *= H / float(W)  # For a rectangle
+
             L += 0.043 * (extraTextFont * t * cmsTextSize) * scale
 
         if len(extraText) > 0:  # Only if something to write
@@ -1195,7 +1198,7 @@ def cmsDiCanvas(
     hup.SetLabelSize(hup.GetLabelSize("Y") * H_ref / Hup, "Y")
     hup.GetYaxis().SetTitle(nameYaxis)
 
-    CMS_lumi(rt.gPad, iPos, scaleLumi=scaleLumi)
+    CMS_lumi(rt.gPad, iPos, scaleLumi=scaleLumi, scaleExtraText=1.1)
 
     canv.cd(2)
     rt.gPad.SetPad(0, 0, 1, Hdw / H)
@@ -1729,7 +1732,7 @@ def setRootObjectProperties(obj, **kwargs):
 
         try:
             if xval is None:
-                ygetattr(obj, method)()
+                getattr(obj, method)()
             elif type(xval) in (tuple,list):
                 getattr(obj, method)(*xval)
             else:
