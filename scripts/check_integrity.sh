@@ -4,7 +4,7 @@
 # workflows that are run at the GitHub server, but that can be run locally.
 #
 # Written by O. Gonzalez (2025_03_11)
-#                         2026_04_25  changing the docker image to
+#                         2026_04_25  changing the docker image to a different (working) one
 #
 
 # It should be run from the top of the package/release
